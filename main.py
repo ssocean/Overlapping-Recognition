@@ -4,8 +4,9 @@ import cv2
 import math
 import numpy as np
 parser = argparse.ArgumentParser(description="Please type the path of the image folder")
-parser.add_argument('-dir', '--input_dir', type=str)
-parser.add_argument('--H', type=str, default=64,help='Height of input image')
+parser.add_argument('--patch_w', type=int, default=512,help='Height of input image')
+parser.add_argument('--stride_w', type=int, default=256,help='Height of input image')
+parser.add_argument('--H', type=int, default=64,help='Height of input image')
 args = parser.parse_args()
 H = args.H
 def overlapping_seg(img:np.ndarray):
@@ -18,16 +19,16 @@ def overlapping_seg(img:np.ndarray):
     # print(f'ori input img shape:{img.shape}')
     h,w = img.shape[:2]
     # print(h,w,c)
-    patch_h = H
+    patch_h = args.H
     ratio = patch_h/h
     resized_w = int(w*ratio)
     img = cv2.resize(img, (resized_w, patch_h))
     # print(f'img.shape waiting for overlap resized :{img.shape}')
     h = patch_h
 
-    patch_w = 512
+    patch_w = args.patch_w
 
-    stride_w = 256
+    stride_w = args.stride_w
 
     # 以长度 patch_h 步长stride_h的方式滑动
     stride_h = H
